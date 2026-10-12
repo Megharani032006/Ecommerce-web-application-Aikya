@@ -1,0 +1,234 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Aikya | Discover Something Beautiful</title>
+  <link rel="stylesheet" href="/static/style.css?v=3">
+</head>
+<body>
+<header class="topbar">
+  <a class="brand" href="/" aria-label="AIKYA home">AIKYA<span class="brand-mark">✦</span><small>Everything Together, Beautifully.</small></a>
+  <div class="search">
+    <input id="searchInput" placeholder="Search crafts, clothing, treats..." aria-label="Search products">
+    <button id="searchBtn">Search</button>
+  </div>
+  <nav>
+    <button class="nav-btn" onclick="showSection('shop')">Shop</button>
+    <button class="nav-btn" onclick="showSection('orders')">My Orders</button>
+    <button class="nav-btn" onclick="showSection('account')">Account</button>
+    <button class="sell-nav" onclick="showSection('seller')">Sell on AIKYA</button>
+    <button class="cart-btn" onclick="showSection('cart')">Bag <span id="cartCount">0</span></button>
+  </nav>
+</header>
+
+<main>
+  <section id="shopSection">
+    <section class="hero">
+      <div class="hero-copy">
+        <p class="eyebrow">A MARKETPLACE OF MANY INDIAS</p>
+        <h1>India's stories.<br>All in one place.</h1>
+        <p>Discover handmade treasures, regional favourites, and everyday essentials from India's makers and neighbourhoods.</p>
+        <button class="primary" onclick="scrollToCollection()">Explore collection →</button>
+        <div class="hero-stats">
+          <div><strong>14</strong><small>Curated categories</small></div>
+          <div><strong>Local</strong><small>Seller stories</small></div>
+          <div><strong>Demo</strong><small>Sample catalogue</small></div>
+        </div>
+      </div>
+      <div class="hero-art">
+        <div class="art-circle"></div>
+        <div class="art-card card-one">✦<br><small>YOUR STYLE</small></div>
+        <div class="art-card card-two">♡<br><small>YOUR MOMENT</small></div>
+        <div class="art-center">A<br><span>AIKYA</span></div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-heading">
+        <div><p class="eyebrow">FROM EVERY CORNER</p><h2>Explore categories</h2><p class="muted">Choose a collection to browse its available products.</p></div>
+      </div>
+      <div id="categories" class="categories"></div>
+    </section>
+
+    <section class="section local-banner">
+      <div><p class="eyebrow">SUPPORT LOCAL SELLERS</p><h2>Made by many hands. Shared with everyone.</h2><p>Shop the demo collections or bring your own craft to AIKYA.</p></div>
+      <button class="primary" onclick="showSection('seller')">Sell on AIKYA →</button>
+    </section>
+
+    <section class="section collection-links">
+      <button onclick="selectCategory('Local and Handmade Products')">Handmade with Love</button>
+      <button onclick="setPriceCollection(199)">Under ₹199</button>
+      <button onclick="setPriceCollection(499)">Under ₹499</button>
+      <button onclick="selectCategory('Festival and Gift Collections')">Festive Picks</button>
+      <button onclick="selectCategory('All', 'newest')">New Arrivals</button>
+    </section>
+
+    <section class="section" id="products">
+      <div class="section-heading">
+        <div><p class="eyebrow" id="collectionEyebrow">THE DEMO COLLECTION</p><h2 id="collectionTitle">Find your favourites</h2><p class="muted" id="categoryDescription"></p></div>
+        <span id="productCount" class="muted"></span>
+      </div>
+      <div class="catalog-controls">
+        <input id="categorySearch" type="search" placeholder="Search this collection" aria-label="Search this collection">
+        <select id="sortProducts" aria-label="Sort products">
+          <option value="popular">Popular</option>
+          <option value="price_asc">Price: low to high</option>
+          <option value="price_desc">Price: high to low</option>
+          <option value="newest">New arrivals</option>
+        </select>
+        <label>Min ₹ <input id="minPrice" type="number" min="0" placeholder="0"></label>
+        <label>Max ₹ <input id="maxPrice" type="number" min="0" placeholder="Any"></label>
+        <label class="availability-filter"><input id="availableOnly" type="checkbox"> In stock</label>
+        <button class="secondary hidden" id="allCategoriesBtn" onclick="selectCategory('All')">All categories</button>
+      </div>
+      <div id="productsGrid" class="products-grid"></div>
+      <button class="secondary load-more hidden" id="loadMoreBtn" onclick="loadMoreProducts()">Load more</button>
+    </section>
+  </section>
+
+  <section id="cartSection" class="section hidden">
+    <p class="eyebrow">ALMOST YOURS</p>
+    <h2>Your shopping bag</h2>
+    <div id="cartContent"></div>
+  </section>
+
+  <section id="accountSection" class="section hidden">
+    <div class="account-card">
+      <p class="eyebrow">WELCOME TO AIKYA</p>
+      <h2>Your account</h2>
+      <p id="accountMessage" class="muted">Log in or create your account to place orders and track deliveries.</p>
+      <div id="accountForms">
+        <form id="loginForm" class="form">
+          <h3>Log in</h3>
+          <input name="email" type="email" placeholder="Email address" required>
+          <input name="password" type="password" placeholder="Password" required>
+          <button class="primary">Log in</button>
+        </form>
+        <hr>
+        <form id="registerForm" class="form">
+          <h3>Create account</h3>
+          <input name="name" placeholder="Full name" required>
+          <input name="email" type="email" placeholder="Email address" required>
+          <input name="password" type="password" minlength="6" placeholder="Password (at least 6 characters)" required>
+          <button class="primary">Register</button>
+        </form>
+      </div>
+      <button id="logoutBtn" class="secondary hidden">Log out</button>
+    </div>
+  </section>
+
+  <section id="sellerSection" class="section hidden">
+    <p class="eyebrow">SELL ON AIKYA</p>
+    <h2>Your craft, your price, your storefront.</h2>
+    <p id="sellerMessage" class="muted">Sign in with a customer account to apply as a seller. Listings are reviewed before appearing in the marketplace.</p>
+    <div id="sellerApplication" class="account-card hidden">
+      <h3>Seller application</h3>
+      <form id="sellerApplyForm" class="form">
+        <input name="phone" type="tel" placeholder="Phone number" required>
+        <input name="shop_name" placeholder="Shop or business name" required>
+        <input name="city" placeholder="City" required>
+        <input name="state" placeholder="State" required>
+        <textarea name="description" placeholder="Tell customers about your shop (optional)"></textarea>
+        <button class="primary">Apply to sell</button>
+      </form>
+    </div>
+    <div id="sellerDashboard" class="hidden">
+      <div id="sellerStats" class="admin-stats"></div>
+      <div class="account-card">
+        <h3>Add a product listing</h3>
+        <p class="muted">Demo marketplace. You choose the price; product photos are limited to JPG, PNG, or WebP up to 5 MB.</p>
+        <form id="sellerProductForm" class="form" enctype="multipart/form-data">
+          <input name="name" placeholder="Product name" required maxlength="120">
+          <select name="category" id="sellerCategory" required></select>
+          <textarea name="description" placeholder="Product description" required></textarea>
+          <input name="price" type="number" min="1" max="10000000" step="0.01" placeholder="Your price in ₹" required>
+          <input name="stock" type="number" min="0" max="1000000" placeholder="Available quantity" required>
+          <input name="brand" placeholder="Brand (optional)">
+          <input name="size" placeholder="Size (optional)">
+          <input name="color" placeholder="Color (optional)">
+          <select name="condition"><option value="new">New</option><option value="handmade">Handmade</option></select>
+          <label class="checkbox-field"><input name="made_in_india" type="checkbox"> Made in India (only if accurate)</label>
+          <input name="image_file" type="file" accept=".jpg,.jpeg,.png,.webp,image/jpeg,image/png,image/webp">
+          <input name="image" type="url" placeholder="Or image URL (optional)">
+          <button class="primary" id="sellerProductSubmit">Publish listing</button>
+          <button class="secondary hidden" id="cancelEditProduct" type="button" onclick="cancelProductEdit()">Cancel edit</button>
+        </form>
+      </div>
+      <h3>Your listings</h3>
+      <div id="sellerProducts" class="products-grid"></div>
+      <h3>Orders with your products</h3>
+      <div id="sellerOrders"></div>
+    </div>
+  </section>
+
+  <section id="ordersSection" class="section hidden">
+    <p class="eyebrow">EVERY STEP, MADE CLEAR</p>
+    <h2>Your orders & tracking</h2>
+    <div id="ordersContent"></div>
+  </section>
+
+  <section id="orderConfirmationSection" class="section hidden">
+    <div class="account-card confirmation-card">
+      <p class="eyebrow">ORDER PLACED</p>
+      <h2>Your AIKYA demo order is confirmed.</h2>
+      <div id="confirmationContent"></div>
+      <button class="primary" onclick="showSection('orders')">Track this order</button>
+      <button class="secondary" onclick="showSection('shop')">Continue shopping</button>
+    </div>
+  </section>
+
+  <section id="adminSection" class="section hidden">
+    <p class="eyebrow">STORE MANAGEMENT</p>
+    <h2>Admin dashboard</h2>
+    <div id="adminStats" class="admin-stats"></div>
+    <div class="account-card">
+      <h3>Add a product</h3>
+      <form id="addProductForm" class="form">
+        <input name="name" placeholder="Product name" required>
+        <select name="category" id="adminCategory" required></select>
+        <input name="price" type="number" min="1" step="0.01" placeholder="Price in ₹" required>
+        <input name="stock" type="number" min="0" placeholder="Stock quantity" required>
+        <input name="image" type="url" placeholder="Image URL (optional)">
+        <button class="primary">Add product</button>
+      </form>
+    </div>
+    <h3>Seller applications</h3>
+    <div id="adminSellers"></div>
+    <div class="account-card">
+      <h3>Low-stock products</h3>
+      <div id="adminLowStock"></div>
+    </div>
+    <h3>Moderate product listings</h3>
+    <div id="adminProducts"></div>
+    <h3>Order status summary</h3>
+    <div id="adminOrderStatuses" class="collection-links"></div>
+    <h3>Manage orders</h3>
+    <div id="adminOrders"></div>
+  </section>
+</main>
+
+<footer>
+  <div>
+    <a class="brand footer-brand" href="/">Aikya</a>
+    <p>Everything Together, Beautifully.</p>
+  </div>
+  <div>
+    <strong>Customer care</strong>
+    <p>Support details are not configured for this local demo.</p>
+  </div>
+  <div>
+    <strong>Delivery information</strong>
+    <p>Free shipping on orders of ₹999 or more.</p>
+    <p>Standard delivery estimate: 3 days (demo).</p>
+  </div>
+  <p class="copyright">© 2026 Aikya. Student project demonstration.</p>
+</footer>
+
+<div id="toast" role="status"></div>
+<dialog id="productDialog" class="product-dialog"><button class="dialog-close" onclick="closeProductDialog()" aria-label="Close">×</button><div id="productDialogContent"></div></dialog>
+<dialog id="checkoutDialog" class="checkout-dialog"><button class="dialog-close" onclick="closeCheckoutDialog()" aria-label="Close">×</button><h2>Delivery details</h2><p class="muted">Demo checkout — no online payment is collected. Cash on Delivery simulation.</p><form id="checkoutForm" class="form"><input name="name" placeholder="Recipient name" required><input name="phone" type="tel" placeholder="Phone number" required><textarea name="address" placeholder="Street address" required></textarea><input name="city" placeholder="City" required><input name="state" placeholder="State" required><input name="pin_code" inputmode="numeric" pattern="[0-9]{6}" maxlength="6" placeholder="6-digit PIN code" required><button class="primary">Place demo order</button></form></dialog>
+<script src="/static/app.js?v=3"></script>
+</body>
+</html>
